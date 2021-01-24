@@ -1,0 +1,75 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Bootcamp {
+  _id: String!
+  acceptGi: Boolean!
+  address: String!
+  averageCost: Float!
+  averageRating: Float!
+  careers: Careers!
+  description: String!
+  email: String!
+  housing: Boolean!
+  jobAssistance: Boolean!
+  jobGuarantee: Boolean!
+  name: String!
+  phone: String!
+  photo: String!
+  slug: String!
+  website: String!
+}
+
+"""The supported careers."""
+enum Careers {
+  BUSINESS
+  DATA_SCIENCE
+  MOBILE_DEVELOPMENT
+  OTHER
+  UI_UX
+  WEB_DEVELOPMENT
+}
+
+input CreateBootcamp {
+  acceptGi: Boolean!
+  address: String!
+  careers: Careers!
+  description: String!
+  email: String!
+  housing: Boolean!
+  jobAssistance: Boolean!
+  jobGuarantee: Boolean!
+  name: String!
+  phone: String!
+  website: String!
+}
+
+input GetBootcamp {
+  id: String!
+}
+
+type Mutation {
+  createBootcamp(createBootcamp: CreateBootcamp!): Bootcamp!
+  deleteBootcamp(_id: String!): Bootcamp!
+  updateBootcamp(_id: GetBootcamp!, updateBootcamp: UpdateBootcamp!): Bootcamp!
+}
+
+type Query {
+  bootcamp(_id: GetBootcamp!): Bootcamp!
+  bootcamps: [Bootcamp!]!
+}
+
+input UpdateBootcamp {
+  acceptGi: Boolean
+  address: String
+  careers: Careers
+  description: String
+  email: String
+  housing: Boolean
+  jobAssistance: Boolean
+  jobGuarantee: Boolean
+  name: String
+  phone: String
+  website: String
+}

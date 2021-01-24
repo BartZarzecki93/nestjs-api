@@ -3,8 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BootcampsModule } from './bootcamps/bootcamps.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BootcampSchemaProvider } from './bootcamps/model/BootcampProvider';
-
+import { BootcampSchemaProvider } from './bootcamps/model/bootcamp.provider';
+import { GraphQLModule } from '@nestjs/graphql';
+import { join } from 'path';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -15,6 +16,12 @@ import { BootcampSchemaProvider } from './bootcamps/model/BootcampProvider';
         useCreateIndex: true,
         useFindAndModify: false,
       }),
+    }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      sortSchema: true,
+      playground: true,
+      debug: false,
     }),
     MongooseModule.forFeatureAsync([BootcampSchemaProvider]),
     BootcampsModule,

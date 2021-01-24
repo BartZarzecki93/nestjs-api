@@ -1,5 +1,6 @@
 import {
   Body,
+  Catch,
   Controller,
   Delete,
   Get,
@@ -7,6 +8,7 @@ import {
   Patch,
   Post,
   Put,
+  UseFilters,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -17,8 +19,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { BootcampsService } from './bootcamps.service';
-import { CreateBootcamp, GetBootcamp } from './dto/bootcamp';
-import { Bootcamp } from './model/Bootcamp';
+import {
+  CreateBootcamp,
+  GetBootcamp,
+  UpdateBootcamp,
+} from './dto/bootcamp.dto';
+import { Bootcamp } from './model/bootcamp';
 
 @ApiTags('Bootcamps')
 @Controller('bootcamps')
@@ -26,7 +32,7 @@ export class BootcampsController {
   constructor(private bootcampsService: BootcampsService) {}
 
   @ApiOperation({
-    description: `Get all bootcamps`,
+    summary: `Get all bootcamps`,
   })
   @Get()
   async getAllBootcamps(): Promise<Bootcamp[]> {
@@ -34,13 +40,17 @@ export class BootcampsController {
   }
 
   @ApiOperation({
-    description: `Get bootcamp by Id`,
+    summary: `Get bootcamp by Id`,
   })
   @Get(':id')
+  @UsePipes(ValidationPipe)
   async getBootcamp(@Param() id: GetBootcamp): Promise<Bootcamp> {
     return await this.bootcampsService.getBootcamp(id);
   }
 
+  @ApiOperation({
+    summary: `Create Bootcamp`,
+  })
   @ApiCreatedResponse({
     description: 'The record has been successfully created.',
     type: Bootcamp,
@@ -53,14 +63,22 @@ export class BootcampsController {
     return await this.bootcampsService.createBootcamp(createBootcamp);
   }
 
+  @ApiOperation({
+    summary: `Delete bootcamp by Id`,
+  })
   @Delete(':id')
+  @UsePipes(ValidationPipe)
   async deleteBootcamp(@Param() id: GetBootcamp): Promise<void> {
     return this.bootcampsService.deleteBootcamp(id);
   }
 
+  @ApiOperation({
+    summary: `Update bootcamp by Id`,
+  })
   @Patch(':id')
+  @UsePipes(ValidationPipe)
   async updateBootcamp(
-    @Body() createBootcamp: CreateBootcamp,
+    @Body() createBootcamp: UpdateBootcamp,
     @Param() id: GetBootcamp,
   ): Promise<Bootcamp> {
     return this.bootcampsService.updateBootcamp(id, createBootcamp);

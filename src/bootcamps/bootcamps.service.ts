@@ -1,6 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateBootcamp, GetBootcamp } from './dto/bootcamp';
-import { Bootcamp } from './model/Bootcamp';
+import {
+  CreateBootcamp,
+  GetBootcamp,
+  UpdateBootcamp,
+} from './dto/bootcamp.dto';
+import { Bootcamp } from './model/bootcamp';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types, ObjectId } from 'mongoose';
 
@@ -37,7 +41,7 @@ export class BootcampsService {
 
   async updateBootcamp(
     bootcampId: GetBootcamp,
-    createBootcamp: CreateBootcamp,
+    createBootcamp: UpdateBootcamp,
   ): Promise<Bootcamp> {
     const bootcamp = await this.getBootcamp(bootcampId);
 
@@ -47,6 +51,7 @@ export class BootcampsService {
       {
         new: true,
         runValidators: true,
+        context: 'query',
       },
     );
   }

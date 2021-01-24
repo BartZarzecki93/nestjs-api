@@ -5,6 +5,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { MongoExceptionFilter } from './filters/mongo-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -23,6 +24,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('api', app, document);
+
+  app.useGlobalFilters(new MongoExceptionFilter()); // Use Mongo exception filter
 
   await app.listen(5000);
 }
