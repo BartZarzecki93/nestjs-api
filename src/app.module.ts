@@ -1,32 +1,23 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { BootcampsModule } from './bootcamps/bootcamps.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { BootcampSchemaProvider } from './bootcamps/model/bootcamp.provider';
-import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
+import { GraphQLModule } from '@nestjs/graphql';
+import { AuthModule } from './auth/auth.module';
+import { DatabaseModule } from './database/database.module';
 @Module({
   imports: [
-    MongooseModule.forRootAsync({
-      useFactory: () => ({
-        uri: 'mongodb://localhost:27017/dev-camps-test',
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useFindAndModify: false,
-      }),
-    }),
+    DatabaseModule,
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       playground: true,
       debug: false,
     }),
-    MongooseModule.forFeatureAsync([BootcampSchemaProvider]),
     BootcampsModule,
+    AuthModule,
+    DatabaseModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

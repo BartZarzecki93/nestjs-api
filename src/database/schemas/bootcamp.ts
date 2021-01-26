@@ -1,9 +1,9 @@
-//import { Column, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Careers } from './bootcamp.enum';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Careers } from '../enums/bootcamp.enum';
+import { User } from './user';
 
 @ObjectType()
 @Schema({
@@ -19,8 +19,9 @@ export class Bootcamp extends Document {
   @Prop({
     type: String,
     required: [true, 'Please add a name'],
-    unique: true,
-    trim: true,
+    index: {
+      unique: 'Two bootcamps cannot share the same name',
+    },
     maxlength: [50, 'Name can not be more than 50 characters'],
     minlength: [4, 'Name can not be less than 4 characters'],
   })
@@ -188,6 +189,13 @@ export class Bootcamp extends Document {
   })
   @Field(() => Boolean)
   acceptGi: boolean;
+
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  @ApiProperty({
+    type: String,
+  })
+  @Field(() => String)
+  user: Types.ObjectId;
 }
 
 export const BootcampSchema = SchemaFactory.createForClass(Bootcamp);

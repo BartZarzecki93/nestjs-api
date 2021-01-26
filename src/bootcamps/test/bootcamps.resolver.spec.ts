@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BootcampsResolver } from './bootcamps.resolver';
+import { BootcampsResolver } from '../bootcamps.resolver';
 
 describe('BootcampsResolver', () => {
   let resolver: BootcampsResolver;

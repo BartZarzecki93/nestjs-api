@@ -1,4 +1,4 @@
-import { Bootcamp, BootcampSchema } from './bootcamp';
+import { Bootcamp, BootcampSchema } from '../schemas/bootcamp';
 import slugify from 'slugify';
 
 export const BootcampSchemaProvider = {
@@ -8,7 +8,6 @@ export const BootcampSchemaProvider = {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     schema.plugin(require('mongoose-unique-validator'));
     schema.pre('save', function () {
-      console.log('Hello from pre save');
       this.slug = slugify(this.name, { lower: true });
     });
     return schema;

@@ -10,7 +10,7 @@ import {
   IsUrl,
   Length,
 } from 'class-validator';
-import { Careers } from '../model/bootcamp.enum';
+import { Careers } from '../../database/enums/bootcamp.enum';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()

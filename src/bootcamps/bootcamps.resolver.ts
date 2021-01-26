@@ -1,13 +1,15 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Types } from 'mongoose';
-import { Bootcamp } from './model/bootcamp';
+import { Bootcamp } from '../database/schemas/bootcamp';
 import { BootcampsService } from './bootcamps.service';
 import {
   GetBootcamp,
   CreateBootcamp,
   UpdateBootcamp,
 } from './dto/bootcamp.dto';
-import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
+import { Payload } from 'src/auth/interface/payload.interface';
+import { GqlGetUser } from 'src/decorators/get-user.decorator';
 
 @Resolver(() => Bootcamp)
 export class BootcampsResolver {
@@ -26,22 +28,32 @@ export class BootcampsResolver {
 
   @Mutation(() => Bootcamp)
   @UsePipes(ValidationPipe)
-  async createBootcamp(@Args('createBootcamp') createBootcamp: CreateBootcamp) {
-    return this.bootcampService.createBootcamp(createBootcamp);
+  @UseGuards(GqlAuthGuard)
+  async createBootcamp(
+    @GqlGetUser() payload: Payload,
+    @Args('createBootcamp') createBootcamp: CreateBootcamp,
+  ) {
+    return this.bootcampService.createBootcamp(createBootcamp, payload);
   }
 
   @Mutation(() => Bootcamp)
   @UsePipes(ValidationPipe)
+  @UseGuards(GqlAuthGuard)
   async updateBootcamp(
+    @GqlGetUser() payload: Payload,
     @Args('_id', { type: () => GetBootcamp }) _id: GetBootcamp,
     @Args('updateBootcamp') updateBootcamp: UpdateBootcamp,
   ) {
-    return this.bootcampService.updateBootcamp(_id, updateBootcamp);
+    return this.bootcampService.updateBootcamp(_id, updateBootcamp, payload);
   }
 
   @Mutation(() => Bootcamp)
   @UsePipes(ValidationPipe)
-  async deleteBootcamp(@Args('_id', { type: () => String }) _id: GetBootcamp) {
-    return this.bootcampService.deleteBootcamp(_id);
+  @UseGuards(GqlAuthGuard)
+  async deleteBootcamp(
+    @GqlGetUser() payload: Payload,
+    @Args('_id', { type: () => GetBootcamp }) _id: GetBootcamp,
+  ) {
+    return this.bootcampService.deleteBootcamp(_id, payload);
   }
 }

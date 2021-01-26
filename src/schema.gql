@@ -18,6 +18,7 @@ type Bootcamp {
   phone: String!
   photo: String!
   slug: String!
+  user: String!
   website: String!
 }
 
@@ -51,13 +52,26 @@ input GetBootcamp {
 
 type Mutation {
   createBootcamp(createBootcamp: CreateBootcamp!): Bootcamp!
-  deleteBootcamp(_id: String!): Bootcamp!
+  deleteBootcamp(_id: GetBootcamp!): Bootcamp!
+  login(loginUser: UserLogin!): Token!
+  register(registerUser: UserCreate!): User!
   updateBootcamp(_id: GetBootcamp!, updateBootcamp: UpdateBootcamp!): Bootcamp!
 }
 
 type Query {
   bootcamp(_id: GetBootcamp!): Bootcamp!
   bootcamps: [Bootcamp!]!
+}
+
+"""The supported roles."""
+enum Roles {
+  ADMIN
+  PUBLISHER
+  USER
+}
+
+type Token {
+  accessToken: String!
 }
 
 input UpdateBootcamp {
@@ -72,4 +86,22 @@ input UpdateBootcamp {
   name: String
   phone: String
   website: String
+}
+
+type User {
+  _id: String!
+  email: String!
+  password: String!
+  role: Roles!
+}
+
+input UserCreate {
+  email: String!
+  password: String!
+  role: Roles!
+}
+
+input UserLogin {
+  email: String!
+  password: String!
 }

@@ -1,18 +1,22 @@
 import {
   BadRequestException,
   Catch,
+  ConflictException,
   ExceptionFilter,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 
 import * as MongooseError from 'mongoose/lib/error'; // I couldn't see the error class is being exported from Mongoose
+import { ValidationError } from '@nestjs/common';
 
 @Catch(MongooseError)
 export class MongoExceptionFilter implements ExceptionFilter {
+  private logger = new Logger('Bootcamps');
+
   catch(exception: MongooseError) {
     let newError;
 
-    console.log(exception);
     switch (exception.name) {
       // case 'DocumentNotFoundError': { break; }
       // case 'MongooseError': { break; } // general Mongoose error
@@ -22,7 +26,9 @@ export class MongoExceptionFilter implements ExceptionFilter {
       // case 'MissingSchemaError': { break; }
       // case 'ValidatorError': { break; }
       case 'ValidationError': {
-        newError = new BadRequestException(exception.name);
+        newError = new ConflictException(
+          exception.errors[Object.keys(exception.errors)[0]].properties.message,
+        );
         break;
       }
       // case 'ObjectExpectedError': { break; }
@@ -36,7 +42,7 @@ export class MongoExceptionFilter implements ExceptionFilter {
         break;
       }
     }
-
+    this.logger.error(`Mongo ${exception.name}`);
     throw newError;
   }
 }

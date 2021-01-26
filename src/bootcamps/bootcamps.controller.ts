@@ -1,18 +1,19 @@
 import {
   Body,
-  Catch,
+  CACHE_MANAGER,
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
   Post,
-  Put,
-  UseFilters,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOperation,
   ApiProperty,
@@ -24,19 +25,34 @@ import {
   GetBootcamp,
   UpdateBootcamp,
 } from './dto/bootcamp.dto';
-import { Bootcamp } from './model/bootcamp';
-
+import { Bootcamp } from '../database/schemas/bootcamp';
+import { Cache } from 'cache-manager';
+import { Logger } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/decorators/get-user.decorator';
+import { Payload } from 'src/auth/interface/payload.interface';
 @ApiTags('Bootcamps')
 @Controller('bootcamps')
 export class BootcampsController {
-  constructor(private bootcampsService: BootcampsService) {}
+  private logger = new Logger('Bootcamps');
+  constructor(
+    private bootcampsService: BootcampsService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   @ApiOperation({
     summary: `Get all bootcamps`,
   })
   @Get()
   async getAllBootcamps(): Promise<Bootcamp[]> {
-    return await this.bootcampsService.getBootcamps();
+    const inMem: Bootcamp[] = await this.cacheManager.get('bootcamps');
+    if (inMem) {
+      return inMem;
+    }
+    const bootcamps = await this.bootcampsService.getBootcamps();
+    await this.cacheManager.set('bootcamps', bootcamps, { ttl: 1000 });
+
+    return bootcamps;
   }
 
   @ApiOperation({
@@ -57,10 +73,18 @@ export class BootcampsController {
   })
   @Post()
   @UsePipes(ValidationPipe)
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   async createBootcamp(
+    @GetUser() payload: Payload,
     @Body() createBootcamp: CreateBootcamp,
   ): Promise<Bootcamp> {
-    return await this.bootcampsService.createBootcamp(createBootcamp);
+    this.logger.verbose(
+      `User ${payload._id} creating bootcamp. Data: ${JSON.stringify(
+        createBootcamp,
+      )}`,
+    );
+    return await this.bootcampsService.createBootcamp(createBootcamp, payload);
   }
 
   @ApiOperation({
@@ -68,8 +92,14 @@ export class BootcampsController {
   })
   @Delete(':id')
   @UsePipes(ValidationPipe)
-  async deleteBootcamp(@Param() id: GetBootcamp): Promise<void> {
-    return this.bootcampsService.deleteBootcamp(id);
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  async deleteBootcamp(
+    @GetUser() payload: Payload,
+    @Param() id: GetBootcamp,
+  ): Promise<void> {
+    this.logger.verbose(`User ${payload._id} deleting bootcamp ${id.id}`);
+    return this.bootcampsService.deleteBootcamp(id, payload);
   }
 
   @ApiOperation({
@@ -77,10 +107,14 @@ export class BootcampsController {
   })
   @Patch(':id')
   @UsePipes(ValidationPipe)
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   async updateBootcamp(
+    @GetUser() payload: Payload,
     @Body() createBootcamp: UpdateBootcamp,
     @Param() id: GetBootcamp,
   ): Promise<Bootcamp> {
-    return this.bootcampsService.updateBootcamp(id, createBootcamp);
+    this.logger.verbose(`User ${payload._id} updating bootcamp ${id.id}`);
+    return this.bootcampsService.updateBootcamp(id, createBootcamp, payload);
   }
 }
