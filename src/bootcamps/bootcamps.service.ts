@@ -4,11 +4,9 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import {
-  CreateBootcamp,
-  GetBootcamp,
-  UpdateBootcamp,
-} from './dto/bootcamp.dto';
+import { CreateBootcamp } from './dto/create-bootcamp.dto';
+import { GetBootcamp } from './dto/get-bootcamp.dto';
+import { UpdateBootcamp } from './dto/update-bootcamp.dto';
 import { Bootcamp } from '../database/schemas/bootcamp';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';

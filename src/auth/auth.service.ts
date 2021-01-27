@@ -2,7 +2,8 @@ import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/database/schemas/user';
-import { UserCreate, UserLogin } from './dto/auth.dto';
+import { CreateUser } from './dto/register.dto';
+import { LoginUser } from './dto/login.dto';
 import { compareSync } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Payload } from './interface/payload.interface';
@@ -16,18 +17,18 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(createUser: UserCreate): Promise<User> {
+  async register(createUser: CreateUser): Promise<User> {
     const { email, password, role } = createUser;
 
     const user = new this.userModel();
     user.password = password;
     user.email = email;
-    user.role = role;
+    user.role = [role];
 
     return user.save();
   }
 
-  async login(loginUser: UserLogin): Promise<Token> {
+  async login(loginUser: LoginUser): Promise<Token> {
     const { email, password } = loginUser;
 
     const user = await this.userModel

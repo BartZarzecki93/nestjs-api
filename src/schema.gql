@@ -46,15 +46,26 @@ input CreateBootcamp {
   website: String!
 }
 
+input CreateUser {
+  email: String!
+  password: String!
+  role: Roles!
+}
+
 input GetBootcamp {
   id: String!
+}
+
+input LoginUser {
+  email: String!
+  password: String!
 }
 
 type Mutation {
   createBootcamp(createBootcamp: CreateBootcamp!): Bootcamp!
   deleteBootcamp(_id: GetBootcamp!): Bootcamp!
-  login(loginUser: UserLogin!): Token!
-  register(registerUser: UserCreate!): User!
+  login(loginUser: LoginUser!): Token!
+  register(registerUser: CreateUser!): User!
   updateBootcamp(_id: GetBootcamp!, updateBootcamp: UpdateBootcamp!): Bootcamp!
 }
 
@@ -93,15 +104,4 @@ type User {
   email: String!
   password: String!
   role: Roles!
-}
-
-input UserCreate {
-  email: String!
-  password: String!
-  role: Roles!
-}
-
-input UserLogin {
-  email: String!
-  password: String!
 }

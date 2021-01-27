@@ -3,7 +3,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Careers } from '../enums/bootcamp.enum';
-import { User } from './user';
 
 @ObjectType()
 @Schema({

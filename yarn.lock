@@ -4481,6 +4481,14 @@ fastify-cors@^4.1.0:
     fastify-plugin "^2.0.0"
     vary "^1.1.2"
 
+fastify-cors@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/fastify-cors/-/fastify-cors-5.2.0.tgz#a92af64d9b7df1cd736c90ecd894a7b23c0cd75a"
+  integrity sha512-Lde71qT23M3Ip3pmny3uN6q6lQ4J5J0/YWoqe2stL4sMT99R5LEtTJ2La2zijFOR5OFhxvxqGgR7BIc2x3amPg==
+  dependencies:
+    fastify-plugin "^3.0.0"
+    vary "^1.1.2"
+
 fastify-error@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/fastify-error/-/fastify-error-0.2.0.tgz#9a1c28d4f42b6259e7a549671c8e5e2d85660634"
@@ -4492,6 +4500,14 @@ fastify-formbody@5.0.0:
   integrity sha512-W79/hq6xGyV4lFsgt+qgKHPorGu4RzAhFQ5GKXI0T8DbkEMx+7gjFAD2y+q194vMMiIvMhuE7j6JyCEZVMOHYw==
   dependencies:
     fastify-plugin "^2.3.2"
+
+fastify-helmet@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/fastify-helmet/-/fastify-helmet-5.1.0.tgz#ceea57e345260efc5338932d6d25343fd7aa9f2f"
+  integrity sha512-1srEve9iKxF7BBetau/PfTK6vnIujtdmshEfsbZFjNRkyb74x96jNhbUH0sYP2cPCjK9OhhyngjKWa3JaGHT3w==
+  dependencies:
+    fastify-plugin "^3.0.0"
+    helmet "^4.0.0"
 
 fastify-plugin@^2.0.0, fastify-plugin@^2.3.2:
   version "2.3.4"
@@ -5120,6 +5136,11 @@ hash-sum@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/hash-sum/-/hash-sum-2.0.0.tgz#81d01bb5de8ea4a214ad5d6ead1b523460b0b45a"
   integrity sha512-WdZTbAByD+pHfl/g9QSsBIIwy8IT+EsPiKDs0KNX+zSHhdDLFKdZu0BQHljvO+0QI/BasbMSUa8wYNCZTvhslg==
+
+helmet@^4.0.0:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/helmet/-/helmet-4.4.1.tgz#a17e1444d81d7a83ddc6e6f9bc6e2055b994efe7"
+  integrity sha512-G8tp0wUMI7i8wkMk2xLcEvESg5PiCitFMYgGRc/PwULB0RVhTP5GFdxOwvJwp9XVha8CuS8mnhmE8I/8dx/pbw==
 
 highlight.js@^10.0.0:
   version "10.5.0"

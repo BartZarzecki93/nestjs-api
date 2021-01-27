@@ -11,7 +11,7 @@ import { Field, InputType } from '@nestjs/graphql';
 import { Role } from '../../database/enums/user.enum';
 
 @InputType()
-export class UserCreate {
+export class CreateUser {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -35,20 +35,4 @@ export class UserCreate {
   @IsEnum(Role)
   @Field(() => Role)
   role: Role;
-}
-
-@InputType()
-export class UserLogin {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  @IsEmail()
-  @Field(() => String)
-  email: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  @Field(() => String)
-  password: string;
 }

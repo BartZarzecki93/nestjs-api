@@ -12,6 +12,7 @@ import {
   ValidationError,
   ValidationPipe,
 } from '@nestjs/common';
+import * as helmet from 'fastify-helmet';
 
 async function bootstrap() {
   const port = process.env.PORT || 5000;
@@ -21,6 +22,27 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
+
+  if (process.env.NODE_ENV === 'development') {
+    app.enableCors();
+  }
+
+  app.register(helmet.fastifyHelmet, {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: [`'self'`],
+        styleSrc: [
+          `'self'`,
+          `'unsafe-inline'`,
+          'cdn.jsdelivr.net',
+          'fonts.googleapis.com',
+        ],
+        fontSrc: [`'self'`, 'fonts.gstatic.com'],
+        imgSrc: [`'self'`, 'data:', 'cdn.jsdelivr.net'],
+        scriptSrc: [`'self'`, `https: 'unsafe-inline'`, `cdn.jsdelivr.net`],
+      },
+    },
+  });
 
   //Using swagger docs
   const config = new DocumentBuilder()

@@ -4,6 +4,7 @@ import { join } from 'path';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
+import { CoursesModule } from './courses/courses.module';
 @Module({
   imports: [
     DatabaseModule,
@@ -16,6 +17,7 @@ import { DatabaseModule } from './database/database.module';
     BootcampsModule,
     AuthModule,
     DatabaseModule,
+    CoursesModule,
   ],
   controllers: [],
   providers: [],

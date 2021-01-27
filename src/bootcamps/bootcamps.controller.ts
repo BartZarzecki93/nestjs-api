@@ -16,21 +16,21 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOperation,
-  ApiProperty,
   ApiTags,
 } from '@nestjs/swagger';
 import { BootcampsService } from './bootcamps.service';
-import {
-  CreateBootcamp,
-  GetBootcamp,
-  UpdateBootcamp,
-} from './dto/bootcamp.dto';
+import { CreateBootcamp } from './dto/create-bootcamp.dto';
+import { GetBootcamp } from './dto/get-bootcamp.dto';
+import { UpdateBootcamp } from './dto/update-bootcamp.dto';
 import { Bootcamp } from '../database/schemas/bootcamp';
 import { Cache } from 'cache-manager';
 import { Logger } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/decorators/get-user.decorator';
 import { Payload } from 'src/auth/interface/payload.interface';
+import { Roles } from 'src/decorators/role.decorator';
+import { Role } from 'src/database/enums/user.enum';
+import { RolesGuard } from '../auth/guards/roles.guard';
 @ApiTags('Bootcamps')
 @Controller('bootcamps')
 export class BootcampsController {
@@ -73,7 +73,8 @@ export class BootcampsController {
   })
   @Post()
   @UsePipes(ValidationPipe)
-  @UseGuards(AuthGuard())
+  @Roles(Role.PUBLISHER)
+  @UseGuards(AuthGuard(), RolesGuard)
   @ApiBearerAuth()
   async createBootcamp(
     @GetUser() payload: Payload,
@@ -92,7 +93,8 @@ export class BootcampsController {
   })
   @Delete(':id')
   @UsePipes(ValidationPipe)
-  @UseGuards(AuthGuard())
+  @Roles(Role.PUBLISHER)
+  @UseGuards(AuthGuard(), RolesGuard)
   @ApiBearerAuth()
   async deleteBootcamp(
     @GetUser() payload: Payload,
@@ -107,7 +109,8 @@ export class BootcampsController {
   })
   @Patch(':id')
   @UsePipes(ValidationPipe)
-  @UseGuards(AuthGuard())
+  @Roles(Role.PUBLISHER)
+  @UseGuards(AuthGuard(), RolesGuard)
   @ApiBearerAuth()
   async updateBootcamp(
     @GetUser() payload: Payload,

@@ -33,15 +33,15 @@ export class User extends Document {
   email: string;
 
   @Prop({
-    type: String,
+    type: [String],
     required: [true],
     enum: Role,
   })
   @ApiProperty({
-    type: String,
+    type: [String],
   })
   @Field(() => Role)
-  role: string;
+  role: Role[];
 
   @Prop({
     type: String,
