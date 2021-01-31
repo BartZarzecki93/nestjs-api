@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, SchemaTypes, Types } from 'mongoose';
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
-import { Careers } from '../enums/bootcamp.enum';
 import { Skill } from '../enums/skill.enum';
 import { Bootcamp } from './bootcamp';
 import { User } from './user';
