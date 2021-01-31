@@ -1,0 +1,55 @@
+version: '3.8'
+services:
+  app:
+    image: 'node:14'
+    container_name: NestApp
+    depends_on:
+      - db
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: 'node'
+    working_dir: /app
+    environment:
+      - NODE_ENV=production
+      - VERSION=1.0
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - '5001:5001'
+    tty: true
+    command: 'npm run start'
+  db:
+    image: mongo
+    container_name: db_mongo
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - '27017:27017'
+volumes:
+  mongo-data: {}
+# version: '3'
+# services:
+#   back_app:
+#     depends_on:
+#       - db
+#     restart: always
+#     build: .
+#     ports:
+#       - '5001:5001'
+
+#     volumes:
+#       - .:/usr/src/app
+#       - /usr/src/app/node_modules
+
+#   db:
+#     image: mongo
+#     container_name: db_mongo
+#     volumes:
+#       - mongo-data:/data/db
+#     ports:
+#       - '27017:27017'
+# volumes:
+#   mongo-data: {}

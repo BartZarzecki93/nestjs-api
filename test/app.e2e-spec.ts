@@ -89,6 +89,36 @@ describe('AppController (e2e)', () => {
       });
   });
 
+  it('AUTH/login should not log in with wrong pass', () => {
+    return app
+      .inject({
+        method: 'POST',
+        url: 'auth/login',
+        payload: userWrongPass,
+      })
+      .then((out: any) => {
+        const statusCode = out.statusCode;
+        const payload = JSON.parse(out.payload);
+        expect(statusCode).toEqual(401);
+        expect(payload.message).toBe('Invalid credentials');
+      });
+  });
+
+  it('AUTH/login should not log in with wrong email', () => {
+    return app
+      .inject({
+        method: 'POST',
+        url: 'auth/login',
+        payload: userWrongEmail,
+      })
+      .then((out: any) => {
+        const statusCode = out.statusCode;
+        const payload = JSON.parse(out.payload);
+        expect(statusCode).toEqual(401);
+        expect(payload.message).toBe('Invalid credentials');
+      });
+  });
+
   afterAll(async () => {
     await closeInMongodConnection();
     await app.close();
@@ -104,4 +134,14 @@ const user: CreateUser = {
 const userLogin: LoginUser = {
   password: 'Swim123zarzdec12$',
   email: '4dggsfs123f@o2.pl',
+};
+
+const userWrongPass: LoginUser = {
+  password: 'Swim123zarzdec',
+  email: '4dggsfs123f@o2.pl',
+};
+
+const userWrongEmail: LoginUser = {
+  password: 'Swim123zarzdec12$',
+  email: '4dggs123f@o2.pl',
 };

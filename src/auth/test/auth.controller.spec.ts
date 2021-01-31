@@ -4,7 +4,6 @@ import { TestDatabaseModule } from '../../../test/test-database.module';
 import { User, UserSchema } from '../../database/schemas/user';
 import { MongooseModule } from '@nestjs/mongoose';
 import { closeInMongodConnection } from '../../../test/test-database.providers';
-import { CreateUser } from '../dto/register.dto';
 import { Role } from '../../database/enums/user.enum';
 import { AuthResolver } from '../auth.resolver';
 import { JwtStrategy } from '../jwt.strategy';
@@ -12,9 +11,7 @@ import * as configuration from 'config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from '../auth.controller';
 import { PassportModule } from '@nestjs/passport';
-import { LoginUser } from '../dto/login.dto';
-import { MongoExceptionFilter } from '../../database/filters/exception.filter';
-import { ValidationPipe } from '@nestjs/common';
+
 const jwtConfig = configuration.get('jwt');
 describe('AuthService', () => {
   let controller: AuthController;
