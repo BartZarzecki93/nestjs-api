@@ -26,9 +26,7 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
 
-  if (process.env.NODE_ENV === 'development') {
-    app.enableCors();
-  }
+  app.enableCors();
 
   app.register(helmet.fastifyHelmet, {
     contentSecurityPolicy: {
