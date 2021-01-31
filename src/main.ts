@@ -50,7 +50,7 @@ async function bootstrap() {
   app.register(require('fastify-rate-limit'), {
     max: 100,
     timeWindow: '1 minute',
-    errorResponseBuilder: function (req, context) {
+    errorResponseBuilder: function () {
       logger.error('Too Many Requests');
 
       return {
