@@ -13,14 +13,16 @@ export class AuthResolver {
 
   @Mutation(() => User)
   @UsePipes(ValidationPipe)
-  async register(@Args('registerUser') registerUser: CreateUser) {
+  async register(
+    @Args('registerUser') registerUser: CreateUser,
+  ): Promise<User> {
     this.logger.verbose(`Registration of the user with ${registerUser.email}`);
     return this.authService.register(registerUser);
   }
 
   @Mutation(() => Token)
   @UsePipes(ValidationPipe)
-  async login(@Args('loginUser') loginUser: LoginUser) {
+  async login(@Args('loginUser') loginUser: LoginUser): Promise<Token> {
     this.logger.verbose(`Login of the user with ${loginUser.email}`);
     return this.authService.login(loginUser);
   }

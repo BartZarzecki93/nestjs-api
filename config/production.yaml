@@ -1,0 +1,12 @@
+server:
+  port: 6000
+
+db:
+  type: 'mongodb'
+  host: 'localhost'
+  port: 27017
+  database: 'dev-camps'
+
+jwt:
+  expiresIn: 3600
+  secret: '$2a$10$sBCo/5PFHoygGQkp1tegIezP3/Ol1I8Oskadsj4lzOkhxHKyXVKeq'

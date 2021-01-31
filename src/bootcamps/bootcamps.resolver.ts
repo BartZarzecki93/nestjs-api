@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Bootcamp } from '../database/schemas/bootcamp';
 import { BootcampsService } from './bootcamps.service';
 import { CreateBootcamp } from './dto/create-bootcamp.dto';
-import { GetBootcamp } from './dto/get-bootcamp.dto';
+import { BootcampID } from './dto/id.dto';
 import { UpdateBootcamp } from './dto/update-bootcamp.dto';
 import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
@@ -18,7 +18,7 @@ export class BootcampsResolver {
 
   @Query(() => Bootcamp)
   @UsePipes(ValidationPipe)
-  async bootcamp(@Args('_id', { type: () => GetBootcamp }) _id: GetBootcamp) {
+  async bootcamp(@Args('_id', { type: () => BootcampID }) _id: BootcampID) {
     return this.bootcampService.getBootcamp(_id);
   }
 
@@ -40,10 +40,11 @@ export class BootcampsResolver {
 
   @Mutation(() => Bootcamp)
   @UsePipes(ValidationPipe)
+  @Roles(Role.PUBLISHER)
   @UseGuards(GqlAuthGuard)
   async updateBootcamp(
     @GqlGetUser() payload: Payload,
-    @Args('_id', { type: () => GetBootcamp }) _id: GetBootcamp,
+    @Args('_id', { type: () => BootcampID }) _id: BootcampID,
     @Args('updateBootcamp') updateBootcamp: UpdateBootcamp,
   ) {
     return this.bootcampService.updateBootcamp(_id, updateBootcamp, payload);
@@ -51,10 +52,11 @@ export class BootcampsResolver {
 
   @Mutation(() => Bootcamp)
   @UsePipes(ValidationPipe)
+  @Roles(Role.PUBLISHER)
   @UseGuards(GqlAuthGuard)
   async deleteBootcamp(
     @GqlGetUser() payload: Payload,
-    @Args('_id', { type: () => GetBootcamp }) _id: GetBootcamp,
+    @Args('_id', { type: () => BootcampID }) _id: BootcampID,
   ) {
     return this.bootcampService.deleteBootcamp(_id, payload);
   }

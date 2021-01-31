@@ -20,7 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { BootcampsService } from './bootcamps.service';
 import { CreateBootcamp } from './dto/create-bootcamp.dto';
-import { GetBootcamp } from './dto/get-bootcamp.dto';
+import { BootcampID } from './dto/id.dto';
 import { UpdateBootcamp } from './dto/update-bootcamp.dto';
 import { Bootcamp } from '../database/schemas/bootcamp';
 import { Cache } from 'cache-manager';
@@ -60,7 +60,7 @@ export class BootcampsController {
   })
   @Get(':id')
   @UsePipes(ValidationPipe)
-  async getBootcamp(@Param() id: GetBootcamp): Promise<Bootcamp> {
+  async getBootcamp(@Param() id: BootcampID): Promise<Bootcamp> {
     return await this.bootcampsService.getBootcamp(id);
   }
 
@@ -73,8 +73,8 @@ export class BootcampsController {
   })
   @Post()
   @UsePipes(ValidationPipe)
-  @Roles(Role.PUBLISHER)
-  @UseGuards(AuthGuard(), RolesGuard)
+  //@Roles(Role.PUBLISHER)
+  @UseGuards(AuthGuard()) //RolesGuard)
   @ApiBearerAuth()
   async createBootcamp(
     @GetUser() payload: Payload,
@@ -98,7 +98,7 @@ export class BootcampsController {
   @ApiBearerAuth()
   async deleteBootcamp(
     @GetUser() payload: Payload,
-    @Param() id: GetBootcamp,
+    @Param() id: BootcampID,
   ): Promise<void> {
     this.logger.verbose(`User ${payload._id} deleting bootcamp ${id.id}`);
     return this.bootcampsService.deleteBootcamp(id, payload);
@@ -115,7 +115,7 @@ export class BootcampsController {
   async updateBootcamp(
     @GetUser() payload: Payload,
     @Body() createBootcamp: UpdateBootcamp,
-    @Param() id: GetBootcamp,
+    @Param() id: BootcampID,
   ): Promise<Bootcamp> {
     this.logger.verbose(`User ${payload._id} updating bootcamp ${id.id}`);
     return this.bootcampsService.updateBootcamp(id, createBootcamp, payload);

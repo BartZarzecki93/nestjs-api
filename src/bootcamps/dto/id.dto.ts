@@ -3,7 +3,7 @@ import { IsMongoId, IsNotEmpty } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class BootcampId {
+export class BootcampID {
   @ApiProperty()
   @IsNotEmpty()
   @IsMongoId()

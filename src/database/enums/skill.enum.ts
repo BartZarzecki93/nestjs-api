@@ -7,6 +7,6 @@ export enum Skill {
 }
 
 registerEnumType(Skill, {
-  name: 'Careers',
+  name: 'Skill',
   description: 'The supported careers.',
 });

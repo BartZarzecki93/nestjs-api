@@ -5,7 +5,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { MongoExceptionFilter } from './database/database-exception.filter';
+import { MongoExceptionFilter } from './database/filters/exception.filter';
 import {
   BadRequestException,
   Logger,
@@ -13,9 +13,12 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import * as helmet from 'fastify-helmet';
+import * as configuration from 'config';
 
 async function bootstrap() {
-  const port = process.env.PORT || 5000;
+  const serverConfig = configuration.get('server');
+
+  const port = process.env.PORT || serverConfig.port;
   const logger = new Logger('Bootstrap');
 
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -41,6 +44,22 @@ async function bootstrap() {
         imgSrc: [`'self'`, 'data:', 'cdn.jsdelivr.net'],
         scriptSrc: [`'self'`, `https: 'unsafe-inline'`, `cdn.jsdelivr.net`],
       },
+    },
+  });
+
+  //rate limit
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  app.register(require('fastify-rate-limit'), {
+    max: 100,
+    timeWindow: '1 minute',
+    errorResponseBuilder: function (req, context) {
+      logger.error('Too Many Requests');
+
+      return {
+        code: 429,
+        error: 'Too Many Requests',
+        date: Date.now(),
+      };
     },
   });
 

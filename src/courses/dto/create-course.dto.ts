@@ -2,12 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsEnum,
+  IsMongoId,
   IsNotEmpty,
   IsNumber,
   Length,
 } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 import { Skill } from '../../database/enums/skill.enum';
+import { Types } from 'mongoose';
 
 @InputType()
 export class CreateCourse {
@@ -44,4 +46,10 @@ export class CreateCourse {
   @IsBoolean()
   @Field(() => Boolean)
   scholarshipAvailable: boolean;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
+  @Field(() => String)
+  bootcamp: Types.ObjectId;
 }

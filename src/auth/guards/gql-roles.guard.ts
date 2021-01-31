@@ -1,6 +1,7 @@
 import {
   Injectable,
   CanActivate,
+  Logger,
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class RolesGuardGql implements CanActivate {
+  private logger = new Logger('Roles');
   constructor(private reflector: Reflector) {}
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
@@ -25,6 +27,7 @@ export class RolesGuardGql implements CanActivate {
     const { payload } = ctx.getContext().req.user;
 
     if (!requiredRoles.some((role) => payload.role?.includes(role))) {
+      this.logger.error(`Unauthorized`);
       throw new UnauthorizedException();
     }
     return true;

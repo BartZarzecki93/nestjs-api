@@ -9,6 +9,8 @@ type Bootcamp {
   averageCost: Float!
   averageRating: Float!
   careers: Careers!
+  courses: [Course!]
+  createdAt: DateTime!
   description: String!
   email: String!
   housing: Boolean!
@@ -18,8 +20,13 @@ type Bootcamp {
   phone: String!
   photo: String!
   slug: String!
+  updatedAt: DateTime!
   user: String!
   website: String!
+}
+
+input BootcampID {
+  id: String!
 }
 
 """The supported careers."""
@@ -30,6 +37,24 @@ enum Careers {
   OTHER
   UI_UX
   WEB_DEVELOPMENT
+}
+
+type Course {
+  _id: String!
+  bootcamp: Bootcamp!
+  createdAt: DateTime!
+  description: String!
+  minimumSkill: Skill!
+  scholarshipAvailable: Boolean!
+  title: String!
+  tuition: Float!
+  updatedAt: DateTime!
+  user: String!
+  weeks: Float!
+}
+
+input CourseID {
+  id: String!
 }
 
 input CreateBootcamp {
@@ -46,15 +71,26 @@ input CreateBootcamp {
   website: String!
 }
 
+input CreateCourse {
+  bootcamp: String!
+  description: String!
+  minimumSkill: Skill!
+  scholarshipAvailable: Boolean!
+  title: String!
+  tuition: Float!
+  weeks: Float!
+}
+
 input CreateUser {
   email: String!
   password: String!
   role: Roles!
 }
 
-input GetBootcamp {
-  id: String!
-}
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 input LoginUser {
   email: String!
@@ -63,15 +99,20 @@ input LoginUser {
 
 type Mutation {
   createBootcamp(createBootcamp: CreateBootcamp!): Bootcamp!
-  deleteBootcamp(_id: GetBootcamp!): Bootcamp!
+  createCourse(createCourse: CreateCourse!): Course!
+  deleteBootcamp(_id: BootcampID!): Bootcamp!
+  deleteCourse(_id: CourseID!): Course!
   login(loginUser: LoginUser!): Token!
   register(registerUser: CreateUser!): User!
-  updateBootcamp(_id: GetBootcamp!, updateBootcamp: UpdateBootcamp!): Bootcamp!
+  updateBootcamp(_id: BootcampID!, updateBootcamp: UpdateBootcamp!): Bootcamp!
+  updateCourse(_id: CourseID!, updateCourse: UpdateCourse!): Course!
 }
 
 type Query {
-  bootcamp(_id: GetBootcamp!): Bootcamp!
+  bootcamp(_id: BootcampID!): Bootcamp!
   bootcamps: [Bootcamp!]!
+  course(_id: CourseID!): Course!
+  courses: [Course!]!
 }
 
 """The supported roles."""
@@ -79,6 +120,13 @@ enum Roles {
   ADMIN
   PUBLISHER
   USER
+}
+
+"""The supported careers."""
+enum Skill {
+  ADVANCED
+  BEGINNER
+  INTERMEDIATE
 }
 
 type Token {
@@ -97,6 +145,14 @@ input UpdateBootcamp {
   name: String
   phone: String
   website: String
+}
+
+input UpdateCourse {
+  description: String!
+  scholarshipAvailable: Boolean!
+  title: String!
+  tuition: Float!
+  weeks: Float!
 }
 
 type User {

@@ -1,0 +1,10 @@
+server:
+  port: 5000
+db:
+  host: 'localhost'
+  port: 27017
+  database: 'dev-camps-test'
+
+jwt:
+  expiresIn: 3600
+  secret: 'topSecretConfig'

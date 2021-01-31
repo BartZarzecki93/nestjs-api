@@ -1,9 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Document, SchemaTypes, Types } from 'mongoose';
+import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Careers } from '../enums/bootcamp.enum';
 import { Skill } from '../enums/skill.enum';
+import { Bootcamp } from './bootcamp';
+import { User } from './user';
 
 @ObjectType()
 @Schema({
@@ -81,14 +83,28 @@ export class Course extends Document {
   @Field(() => Boolean)
   scholarshipAvailable: boolean;
 
-  @Prop({ type: Types.ObjectId, ref: 'Bootcamp', required: true })
   @ApiProperty({
     type: String,
   })
-  @Field(() => String)
+  @Prop()
+  @Field(() => GraphQLISODateTime)
+  createdAt!: Date;
+
+  @ApiProperty({
+    type: String,
+  })
+  @Prop()
+  @Field(() => GraphQLISODateTime)
+  updatedAt!: Date;
+
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Bootcamp', required: true })
+  @ApiProperty({
+    type: String,
+  })
+  @Field(() => Bootcamp)
   bootcamp: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
   @ApiProperty({
     type: String,
   })

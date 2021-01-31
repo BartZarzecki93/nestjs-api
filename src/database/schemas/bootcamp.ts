@@ -1,12 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Careers } from '../enums/bootcamp.enum';
+import { Course } from './course';
 
 @ObjectType()
 @Schema({
   timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
 })
 export class Bootcamp extends Document {
   @ApiProperty({
@@ -94,15 +97,6 @@ export class Bootcamp extends Document {
   @Field(() => String)
   address: string;
 
-  // @Prop()
-  // @ApiProperty({
-  //   type: String,
-  // })
-  // location: {
-  //   type: string;
-  //   enum: ['Point'];
-  // };
-
   @Prop({
     type: String,
     required: [true],
@@ -189,12 +183,41 @@ export class Bootcamp extends Document {
   @Field(() => Boolean)
   acceptGi: boolean;
 
+  @ApiProperty({
+    type: String,
+  })
+  @Prop()
+  @Field(() => GraphQLISODateTime)
+  createdAt!: Date;
+
+  @ApiProperty({
+    type: String,
+  })
+  @Prop()
+  @Field(() => GraphQLISODateTime)
+  updatedAt!: Date;
+
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   @ApiProperty({
     type: String,
   })
   @Field(() => String)
   user: Types.ObjectId;
+
+  @Field(() => [Course], { nullable: true })
+  courses: Types.ObjectId;
+
+  @Prop({
+    type: Number,
+  })
+  __v: number;
 }
 
 export const BootcampSchema = SchemaFactory.createForClass(Bootcamp);
+
+BootcampSchema.virtual('courses', {
+  ref: 'Course',
+  localField: '_id',
+  foreignField: 'bootcamp',
+  justOne: false,
+});
