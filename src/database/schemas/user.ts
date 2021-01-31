@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Role } from '../enums/user.enum';
 
 @ObjectType()
@@ -54,6 +54,20 @@ export class User extends Document {
   })
   @Field(() => String)
   password: string;
+
+  @ApiProperty({
+    type: String,
+  })
+  @Prop()
+  @Field(() => GraphQLISODateTime)
+  createdAt!: Date;
+
+  @ApiProperty({
+    type: String,
+  })
+  @Prop()
+  @Field(() => GraphQLISODateTime)
+  updatedAt!: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

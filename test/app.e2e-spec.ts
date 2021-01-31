@@ -2,13 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {
   ValidationError,
   BadRequestException,
-  INestApplication,
   ValidationPipe,
 } from '@nestjs/common';
-import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+
 import { CoursesModule } from '../src/courses/courses.module';
-import { DatabaseModule } from '../src/database/database.module';
 import { AuthModule } from '../src/auth/auth.module';
 import { BootcampsModule } from '../src/bootcamps/bootcamps.module';
 import { TestDatabaseModule } from './test-database.module';
@@ -17,7 +14,7 @@ import { MongoExceptionFilter } from '../src/database/filters/exception.filter';
 import { Role } from '../src/database/enums/user.enum';
 import { CreateUser } from '../src/auth/dto/register.dto';
 import { closeInMongodConnection } from './test-database.providers';
-import { LoginUser } from 'src/auth/dto/login.dto';
+import { LoginUser } from '../src/auth/dto/login.dto';
 
 describe('AppController (e2e)', () => {
   let app;
@@ -52,7 +49,6 @@ describe('AppController (e2e)', () => {
       .then((out: any) => {
         const statusCode = out.statusCode;
         const payload = JSON.parse(out.payload);
-        console.log(payload);
         expect(statusCode).toEqual(201);
         expect(payload.email).toEqual(user.email);
         expect(payload.role).toEqual([Role.USER]);
@@ -88,7 +84,6 @@ describe('AppController (e2e)', () => {
       .then((out: any) => {
         const statusCode = out.statusCode;
         const payload = JSON.parse(out.payload);
-        console.log(payload);
         expect(statusCode).toEqual(201);
         expect(payload.accessToken).toBeTruthy();
       });
@@ -99,6 +94,7 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 });
+
 //using hashed password since current testing set up do not allow to use hooks
 const user: CreateUser = {
   password: '$2a$10$WWvc4B3Y20ZyR43IiurXpOQvkVRgla5vV8XOLfAhbxa6Rd4sZl84O',

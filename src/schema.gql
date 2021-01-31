@@ -157,7 +157,9 @@ input UpdateCourse {
 
 type User {
   _id: String!
+  createdAt: DateTime!
   email: String!
   password: String!
   role: Roles!
+  updatedAt: DateTime!
 }
