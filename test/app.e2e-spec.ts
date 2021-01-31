@@ -22,7 +22,7 @@ describe('AppController (e2e)', () => {
   beforeAll(async () => {
     const fastifyAdapter = new FastifyAdapter();
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [BootcampsModule, AuthModule, TestDatabaseModule, CoursesModule],
+      imports: [TestDatabaseModule, BootcampsModule, AuthModule, CoursesModule],
     }).compile();
 
     app = moduleFixture.createNestApplication(fastifyAdapter);
@@ -95,9 +95,8 @@ describe('AppController (e2e)', () => {
   });
 });
 
-//using hashed password since current testing set up do not allow to use hooks
 const user: CreateUser = {
-  password: '$2a$10$WWvc4B3Y20ZyR43IiurXpOQvkVRgla5vV8XOLfAhbxa6Rd4sZl84O',
+  password: 'Swim123zarzdec12$',
   email: '4dggsfs123f@o2.pl',
   role: Role.USER,
 };
