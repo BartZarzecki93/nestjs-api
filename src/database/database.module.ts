@@ -2,10 +2,10 @@ import { Global, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
-import { BootcampSchemaProvider } from './hooks/bootcamp.hook';
-import { UserSchemaProvider } from './hooks/user.hook';
+import { BootcampHook } from './hooks/bootcamp.hook';
+import { UserHook } from './hooks/user.hook';
 import * as configuration from 'config';
-import { CourseSchemaProvider } from './hooks/course.hook';
+import { CourseHook } from './hooks/course.hook';
 const dbConfig = configuration.get('db');
 
 @Global()
@@ -20,11 +20,7 @@ const dbConfig = configuration.get('db');
         useFindAndModify: false,
       }),
     }),
-    MongooseModule.forFeatureAsync([
-      BootcampSchemaProvider,
-      UserSchemaProvider,
-      CourseSchemaProvider,
-    ]),
+    MongooseModule.forFeatureAsync([BootcampHook, UserHook, CourseHook]),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,

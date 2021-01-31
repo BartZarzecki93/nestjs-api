@@ -38,7 +38,7 @@ export class AuthService {
       .select('+password');
 
     if (!user) {
-      this.logger.error(`Invalid credentials -user`);
+      this.logger.error(`Invalid credentials`);
       throw new UnauthorizedException(`Invalid credentials`);
     }
 

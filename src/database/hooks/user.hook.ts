@@ -1,7 +1,7 @@
 import { User, UserSchema } from '../schemas/user';
 import { genSalt, hash } from 'bcryptjs';
 
-export const UserSchemaProvider = {
+export const UserHook = {
   name: User.name,
   useFactory: () => {
     const schema = UserSchema;

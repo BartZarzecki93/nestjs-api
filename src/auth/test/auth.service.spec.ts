@@ -11,6 +11,7 @@ import { JwtStrategy } from '../jwt.strategy';
 import * as configuration from 'config';
 import { JwtModule } from '@nestjs/jwt';
 import { LoginUser } from '../dto/login.dto';
+import { MongoExceptionFilter } from '../../database/filters/exception.filter';
 
 const jwtConfig = configuration.get('jwt');
 describe('AuthService', () => {
@@ -41,12 +42,50 @@ describe('AuthService', () => {
 
   it('should return new user', async () => {
     const newUser = await service.register(userCreate);
-    console.log(newUser);
+    expect(newUser).toBeTruthy();
+    expect(newUser.email).toBe(userCreate.email);
     expect(newUser.password).not.toBe(userCreate.password);
   });
 
-  it('should not return new user', async () => {
-    await expect(service.register(userWrongEmail)).rejects.toThrow();
+  it('should not return new user (wrong email)', async () => {
+    service.register(userWrongEmail).catch((e) => {
+      const message = e.errors[Object.keys(e.errors)[0]].properties.message;
+      expect(message).toBe('Please add a valid email');
+    });
+  });
+
+  it('should not return new user (the same email)', async () => {
+    service.register(userCreate).catch((e) => {
+      const message = e.errors[Object.keys(e.errors)[0]].properties.message;
+      expect(message).toBe('Two users cannot share the same username');
+    });
+  });
+
+  it('should not return new user (no password)', async () => {
+    service.register(userNoPassword).catch((e) => {
+      const message = e.errors[Object.keys(e.errors)[0]].properties.message;
+      expect(message).toBe('Please add a password');
+    });
+  });
+
+  it('should not return new user (short password)', async () => {
+    service.register(userShortPassword).catch((e) => {
+      const message = e.errors[Object.keys(e.errors)[0]].properties.message;
+      expect(message).toBe('Password can not be less than 4 characters');
+    });
+  });
+  it('should not login (wrong email)', async () => {
+    service.login(userWrongLogin).catch((e) => {
+      expect(e.message).toBe('Invalid credentials');
+      expect(e.status).toBe(401);
+    });
+  });
+
+  it('should not login (wrong password)', async () => {
+    service.login(userWrongPass).catch((e) => {
+      expect(e.message).toBe('Invalid credentials');
+      expect(e.status).toBe(401);
+    });
   });
 
   it('should login', async () => {
@@ -71,8 +110,30 @@ const userLogin: LoginUser = {
   email: '4dggsfs123f@02.pl',
 };
 
+const userWrongLogin: LoginUser = {
+  password: 'Swimzaerz12$',
+  email: '4dggsfs123@02.pl',
+};
+
+const userWrongPass: LoginUser = {
+  password: 'Swimzaerz1$',
+  email: '4dggsfs123f@02.pl',
+};
+
 const userWrongEmail: CreateUser = {
   password: 'Swimzaerz12$',
-  email: '4dggsfs123f@02.pl',
+  email: '4dggsfs123',
+  role: Role.USER,
+};
+
+const userNoPassword: CreateUser = {
+  password: '',
+  email: '4dggsfs123',
+  role: Role.USER,
+};
+
+const userShortPassword: CreateUser = {
+  password: '123',
+  email: '4dggsfs123',
   role: Role.USER,
 };

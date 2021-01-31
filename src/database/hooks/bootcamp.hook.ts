@@ -1,7 +1,7 @@
 import { Bootcamp, BootcampSchema } from '../schemas/bootcamp';
 import slugify from 'slugify';
 
-export const BootcampSchemaProvider = {
+export const BootcampHook = {
   name: Bootcamp.name,
   useFactory: () => {
     const schema = BootcampSchema;

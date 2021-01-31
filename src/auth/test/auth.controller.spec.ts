@@ -13,6 +13,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from '../auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { LoginUser } from '../dto/login.dto';
+import { MongoExceptionFilter } from '../../database/filters/exception.filter';
+import { ValidationPipe } from '@nestjs/common';
 const jwtConfig = configuration.get('jwt');
 describe('AuthService', () => {
   let controller: AuthController;
@@ -47,13 +49,35 @@ describe('AuthService', () => {
     expect(newUser.password).not.toBe(userCreate.password);
   });
 
-  it('should not return new user', async () => {
-    await expect(controller.register(userWrongEmail)).rejects.toThrow();
+  it('should not return new user (same email)', async () => {
+    try {
+      await controller.register(userCreate);
+    } catch (e) {
+      const message = e.errors[Object.keys(e.errors)[0]].properties.message;
+      expect(message).toBe('Two users cannot share the same username');
+    }
+  });
+
+  it('should not return new user (wrong email)', async () => {
+    try {
+      await controller.register(userWrongEmail);
+    } catch (e) {
+      const message = e.errors[Object.keys(e.errors)[0]].properties.message;
+      expect(message).toBe('Please add a valid email');
+    }
+  });
+
+  it('should not return new user (short pass)', async () => {
+    try {
+      await controller.register(userShortPass);
+    } catch (e) {
+      const message = e.errors[Object.keys(e.errors)[0]].properties.message;
+      expect(message).toBe('Please add a valid email');
+    }
   });
 
   it('should login', async () => {
     const token = await controller.login(userLogin);
-    console.log(token);
     expect(token.accessToken).toBeTruthy();
   });
 
@@ -63,19 +87,25 @@ describe('AuthService', () => {
   });
 });
 
-const userCreate: CreateUser = {
+const userCreate = {
   password: 'Swimzaerz12$',
   email: '4dggsfs123f@02.pl',
   role: Role.USER,
 };
 
-const userLogin: LoginUser = {
+const userLogin = {
   password: 'Swimzaerz12$',
   email: '4dggsfs123f@02.pl',
 };
 
-const userWrongEmail: CreateUser = {
+const userWrongEmail = {
   password: 'Swimzaerz12$',
-  email: '4dggsfs123f@02.pl',
+  email: '4dggsfs123f@',
+  role: Role.USER,
+};
+
+const userShortPass = {
+  password: 'swimzaer',
+  email: '4dggsfs123f@kk.pl',
   role: Role.USER,
 };

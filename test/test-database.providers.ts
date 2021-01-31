@@ -1,9 +1,10 @@
 import { GraphQLModule } from '@nestjs/graphql';
-import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { join } from 'path';
-import { BootcampSchemaProvider } from '../src/database/hooks/bootcamp.hook';
-import { UserSchemaProvider } from '../src/database/hooks/user.hook';
+import { BootcampHook } from '../src/database/hooks/bootcamp.hook';
+import { UserHook } from '../src/database/hooks/user.hook';
+import { CourseHook } from '../src/database/hooks/course.hook';
 let mongod: MongoMemoryServer;
 
 export const rootMongooseTestModule = MongooseModule.forRootAsync({
@@ -21,8 +22,9 @@ export const rootMongooseTestModule = MongooseModule.forRootAsync({
 });
 
 export const featureMongooseTestModule = MongooseModule.forFeatureAsync([
-  BootcampSchemaProvider,
-  UserSchemaProvider,
+  BootcampHook,
+  UserHook,
+  CourseHook,
 ]);
 
 export const gqlTestModule = GraphQLModule.forRoot({
