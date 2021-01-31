@@ -6,8 +6,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from 'src/database/enums/user.enum';
-import { ROLES_KEY } from 'src/decorators/role.decorator';
+import { Role } from '../../database/enums/user.enum';
+import { ROLES_KEY } from '../../decorators/role.decorator';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()

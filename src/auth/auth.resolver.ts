@@ -1,6 +1,6 @@
 import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Token } from 'src/database/schemas/token';
+import { Token } from '../database/schemas/token';
 import { User } from '../database/schemas/user';
 import { AuthService } from './auth.service';
 import { CreateUser } from './dto/register.dto';

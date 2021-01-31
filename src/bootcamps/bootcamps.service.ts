@@ -10,8 +10,7 @@ import { UpdateBootcamp } from './dto/update-bootcamp.dto';
 import { Bootcamp } from '../database/schemas/bootcamp';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Payload } from 'src/auth/interface/payload.interface';
-import console from 'console';
+import { Payload } from '../auth/interface/payload.interface';
 
 @Injectable()
 export class BootcampsService {

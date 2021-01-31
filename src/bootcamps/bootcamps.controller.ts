@@ -26,10 +26,10 @@ import { Bootcamp } from '../database/schemas/bootcamp';
 import { Cache } from 'cache-manager';
 import { Logger } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/decorators/get-user.decorator';
-import { Payload } from 'src/auth/interface/payload.interface';
-import { Roles } from 'src/decorators/role.decorator';
-import { Role } from 'src/database/enums/user.enum';
+import { GetUser } from '../decorators/get-user.decorator';
+import { Payload } from '../auth/interface/payload.interface';
+import { Roles } from '../decorators/role.decorator';
+import { Role } from '../database/enums/user.enum';
 import { RolesGuard } from '../auth/guards/roles.guard';
 @ApiTags('Bootcamps')
 @Controller('bootcamps')

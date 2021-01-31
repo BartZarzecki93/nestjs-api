@@ -5,12 +5,12 @@ import { CreateBootcamp } from './dto/create-bootcamp.dto';
 import { BootcampID } from './dto/id.dto';
 import { UpdateBootcamp } from './dto/update-bootcamp.dto';
 import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
-import { Payload } from 'src/auth/interface/payload.interface';
-import { GqlGetUser } from 'src/decorators/gql-get-user.decorator';
-import { Roles } from 'src/decorators/role.decorator';
-import { Role } from 'src/database/enums/user.enum';
-import { RolesGuardGql } from 'src/auth/guards/gql-roles.guard';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
+import { Payload } from '../auth/interface/payload.interface';
+import { GqlGetUser } from '../decorators/gql-get-user.decorator';
+import { Roles } from '../decorators/role.decorator';
+import { Role } from '../database/enums/user.enum';
+import { RolesGuardGql } from '../auth/guards/gql-roles.guard';
 
 @Resolver(() => Bootcamp)
 export class BootcampsResolver {
