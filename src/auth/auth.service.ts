@@ -1,13 +1,13 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from 'src/database/schemas/user';
+import { User } from '../database/schemas/user';
 import { CreateUser } from './dto/register.dto';
 import { LoginUser } from './dto/login.dto';
 import { compareSync } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Payload } from './interface/payload.interface';
-import { Token } from 'src/database/schemas/token';
+import { Token } from '../database/schemas/token';
 
 @Injectable()
 export class AuthService {
@@ -38,7 +38,7 @@ export class AuthService {
       .select('+password');
 
     if (!user) {
-      this.logger.error(`Invalid credentials`);
+      this.logger.error(`Invalid credentials -user`);
       throw new UnauthorizedException(`Invalid credentials`);
     }
 

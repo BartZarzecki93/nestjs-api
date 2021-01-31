@@ -1,6 +1,6 @@
 import { Course, CourseSchema } from '../schemas/course';
 
-export const UserSchemaProvider = {
+export const CourseSchemaProvider = {
   name: Course.name,
   useFactory: () => {
     const schema = CourseSchema;

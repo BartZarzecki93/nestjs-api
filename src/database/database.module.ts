@@ -3,8 +3,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
 import { BootcampSchemaProvider } from './hooks/bootcamp.hook';
-import { UserSchemaProvider } from './hooks/user.provider';
+import { UserSchemaProvider } from './hooks/user.hook';
 import * as configuration from 'config';
+import { CourseSchemaProvider } from './hooks/course.hook';
 const dbConfig = configuration.get('db');
 
 @Global()
@@ -22,6 +23,7 @@ const dbConfig = configuration.get('db');
     MongooseModule.forFeatureAsync([
       BootcampSchemaProvider,
       UserSchemaProvider,
+      CourseSchemaProvider,
     ]),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),

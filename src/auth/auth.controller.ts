@@ -11,7 +11,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Token } from 'src/database/schemas/token';
+import { Token } from '../database/schemas/token';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
