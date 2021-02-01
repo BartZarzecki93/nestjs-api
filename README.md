@@ -37,3 +37,15 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## API
+
+```bash
+http://localhost:5000/api
+```
+
+## GraphQl
+
+```bash
+http://localhost:5000/graphql
+```

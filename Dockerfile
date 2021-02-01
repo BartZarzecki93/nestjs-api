@@ -1,14 +1,12 @@
-FROM node:latest AS builder
+FROM node:14.5 AS builder
 WORKDIR /app
 COPY ./package.json ./
 RUN npm install
 COPY . .
+RUN ls -l
 RUN npm run build
 
-
-FROM node:latest
-WORKDIR /app
-COPY --from=builder /app ./
 RUN ls -l
-EXPOSE 5001
+EXPOSE 3000
+
 CMD ["npm", "run", "start"]
