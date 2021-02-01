@@ -74,6 +74,40 @@ describe('AppController (e2e)', () => {
       });
   });
 
+  it('AUTH/register should not register a user with bad email', () => {
+    return app
+      .inject({
+        method: 'POST',
+        url: 'auth/register',
+        payload: userBadEmail,
+      })
+      .then((out: any) => {
+        const statusCode = out.statusCode;
+        const payload = JSON.parse(out.payload);
+
+        expect(statusCode).toEqual(400);
+        expect(payload.error).toEqual('Bad Request');
+        expect(payload.message[0].isEmail).toEqual('email must be an email');
+      });
+  });
+
+  it('AUTH/register should not register a user with weak password', () => {
+    return app
+      .inject({
+        method: 'POST',
+        url: 'auth/register',
+        payload: userWeakPass,
+      })
+      .then((out: any) => {
+        const statusCode = out.statusCode;
+        const payload = JSON.parse(out.payload);
+
+        expect(statusCode).toEqual(400);
+        expect(payload.error).toEqual('Bad Request');
+        expect(payload.message[0].matches).toEqual('Password is too weak ');
+      });
+  });
+
   it('AUTH/login', () => {
     return app
       .inject({
@@ -144,4 +178,16 @@ const userWrongPass: LoginUser = {
 const userWrongEmail: LoginUser = {
   password: 'Swim123zarzdec12$',
   email: '4dggs123f@o2.pl',
+};
+
+const userBadEmail: CreateUser = {
+  password: 'Swimzaerz12$',
+  email: '4dggsfs123',
+  role: Role.USER,
+};
+
+const userWeakPass: CreateUser = {
+  password: 'swimz',
+  email: '4dggssdfsdfs123@o2.pl',
+  role: Role.USER,
 };

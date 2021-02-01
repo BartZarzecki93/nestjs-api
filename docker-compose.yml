@@ -13,6 +13,7 @@ services:
     working_dir: /app
     environment:
       - MONGO_DB=dev-camps
+      - HOST=mongo
     volumes:
       - .:/app
       - /app/node_modules

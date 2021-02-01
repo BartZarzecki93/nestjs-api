@@ -13,7 +13,9 @@ const dbConfig = configuration.get('db');
   imports: [
     MongooseModule.forRootAsync({
       useFactory: () => ({
-        uri: `mongodb://localhost:27017/${dbConfig.database}`,
+        uri: `mongodb://${process.env.HOST || dbConfig.host}:27017/${
+          process.env.MONGO_DB || dbConfig.database
+        }`,
         useUnifiedTopology: true,
         useNewUrlParser: true,
         useCreateIndex: true,
