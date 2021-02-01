@@ -41,11 +41,30 @@ $ npm run test:cov
 ## API
 
 ```bash
+npm run start:dev
+
 http://localhost:5000/api
 ```
 
 ## GraphQl
 
 ```bash
+npm run start:dev
+
 http://localhost:5000/graphql
+```
+
+## Docker
+
+```bash
+To run docker:
+docker-compose up -d
+
+Run in CLI:
+
+curl --location --request POST '0.0.0.0:3000/auth/register' --header 'Content-type: application/json' --data-raw '{"email": "bart@o2.pl", "password": "Swimzarzec12$", "role": "user"}'
+
+To stop docker:
+docker-compose down
+
 ```
