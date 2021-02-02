@@ -29,8 +29,8 @@ describe('AuthService', () => {
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [
-        //TestDatabaseModule,
-        DatabaseModule,
+        TestDatabaseModule,
+        //DatabaseModule,
         JwtModule.register({
           secret: process.env.JWT_SECRET || jwtConfig.secret,
           signOptions: {
@@ -42,14 +42,14 @@ describe('AuthService', () => {
       providers: [AuthService, JwtStrategy, AuthResolver],
     }).compile();
 
-    model = module.get(getModelToken(User.name));
+    //model = module.get(getModelToken(User.name));
     // db = module.get(getConnectionToken());
     service = module.get<AuthService>(AuthService);
   });
 
-  beforeAll(async () => {
-    await model.deleteMany({});
-  });
+  // beforeAll(async () => {
+  //   await model.deleteMany({});
+  // });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
@@ -109,6 +109,7 @@ describe('AuthService', () => {
   });
 
   afterAll(async () => {
+    await closeInMongodConnection();
     await module.close();
   });
 });
