@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Role } from '../enums/user.enum';
-
+import { compareSync } from 'bcryptjs';
 @ObjectType()
 @Schema({
   timestamps: true,
@@ -68,6 +68,17 @@ export class User extends Document {
   @Prop()
   @Field(() => GraphQLISODateTime)
   updatedAt!: Date;
+
+  async comparePassword(candidatePassword: string, userPassword: string) {
+    return await compareSync(candidatePassword, userPassword);
+  }
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.methods.comparePassword = async (
+  candidatePassword: string,
+  userPassword: string,
+) => {
+  return await compareSync(candidatePassword, userPassword);
+};

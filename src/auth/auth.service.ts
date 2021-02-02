@@ -4,7 +4,6 @@ import { Model } from 'mongoose';
 import { User } from '../database/schemas/user';
 import { CreateUser } from './dto/register.dto';
 import { LoginUser } from './dto/login.dto';
-import { compareSync } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Payload } from './interface/payload.interface';
 import { Token } from '../database/schemas/token';
@@ -18,14 +17,9 @@ export class AuthService {
   ) {}
 
   async register(createUser: CreateUser): Promise<User> {
-    const { email, password, role } = createUser;
+    const userNew = this.userModel.create(createUser);
 
-    const user = new this.userModel();
-    user.password = password;
-    user.email = email;
-    user.role = [role];
-
-    return user.save();
+    return userNew;
   }
 
   async login(loginUser: LoginUser): Promise<Token> {
@@ -42,7 +36,7 @@ export class AuthService {
       throw new UnauthorizedException(`Invalid credentials`);
     }
 
-    const isMatch = await this.matchPassword(password, user.password);
+    const isMatch = await user.comparePassword(password, user.password);
 
     if (!isMatch) {
       this.logger.error(`Invalid credentials`);
@@ -58,12 +52,5 @@ export class AuthService {
 
     const token: Token = { accessToken };
     return token;
-  }
-
-  private async matchPassword(
-    enteredPassword: string,
-    password: string,
-  ): Promise<boolean> {
-    return await compareSync(enteredPassword, password);
   }
 }

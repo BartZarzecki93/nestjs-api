@@ -2,7 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from '../auth.service';
 import { TestDatabaseModule } from '../../../test/test-database.module';
 import { User, UserSchema } from '../../database/schemas/user';
-import { MongooseModule } from '@nestjs/mongoose';
+import {
+  MongooseModule,
+  getModelToken,
+  getConnectionToken,
+} from '@nestjs/mongoose';
 import { closeInMongodConnection } from '../../../test/test-database.providers';
 import { CreateUser } from '../dto/register.dto';
 import { Role } from '../../database/enums/user.enum';
@@ -12,16 +16,21 @@ import * as configuration from 'config';
 import { JwtModule } from '@nestjs/jwt';
 import { LoginUser } from '../dto/login.dto';
 import { MongoExceptionFilter } from '../../database/filters/exception.filter';
+import { DatabaseModule } from '../../database/database.module';
+import { Connection, Model } from 'mongoose';
 
 const jwtConfig = configuration.get('jwt');
 describe('AuthService', () => {
   let service: AuthService;
   let module: TestingModule;
+  let model: Model<User>;
+  let db;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [
-        TestDatabaseModule,
+        //TestDatabaseModule,
+        DatabaseModule,
         JwtModule.register({
           secret: process.env.JWT_SECRET || jwtConfig.secret,
           signOptions: {
@@ -33,7 +42,13 @@ describe('AuthService', () => {
       providers: [AuthService, JwtStrategy, AuthResolver],
     }).compile();
 
+    model = module.get(getModelToken(User.name));
+    // db = module.get(getConnectionToken());
     service = module.get<AuthService>(AuthService);
+  });
+
+  beforeAll(async () => {
+    await model.deleteMany({});
   });
 
   it('should be defined', () => {
@@ -94,7 +109,6 @@ describe('AuthService', () => {
   });
 
   afterAll(async () => {
-    await closeInMongodConnection();
     await module.close();
   });
 });
